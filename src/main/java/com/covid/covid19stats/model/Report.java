@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.covid.covid19stats.model;
 
 import jakarta.persistence.*;
@@ -9,35 +5,46 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "covid_reports")
-
-
-/**
- *
- * @author rodol
- */
- 
 public class Report {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String iso;
-    private String province;
-    private LocalDate date;
-    private int confirmed;
-    private int deaths;
-    private int recovered;
-
-    // Getters y setters manuales (ok)
+    private Integer id;
     
-    // Getters y Setters
+    @Column(name = "iso", nullable = false, length = 10)
+    private String iso;
+    
+    @Column(name = "province", length = 100, nullable = false)
+    private String province;
+    
+    // ... constructor ...
+    public Report() {
+        this.province = "Nacional"; // Valor por defecto
+    }
+    
+    // Columna 'fecha' en español
+    
+    @Column(name = "fecha", nullable = true)
+    private LocalDate fecha;
+    
+    // Columna 'date' en inglés
+    @Column(name = "date", nullable = true)
+    private LocalDate date;
+    
+    @Column(name = "confirmed", nullable = false)
+    private Integer confirmed = 0;
+    
+    @Column(name = "deaths", nullable = false)
+    private Integer deaths = 0;
+    
+    @Column(name = "recovered", nullable = false)
+    private Integer recovered = 0;
 
-    public Long getId() {
+    // Getters y Setters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -54,7 +61,18 @@ public class Report {
     }
 
     public void setProvince(String province) {
-        this.province = province;
+        if (province == null || province.trim().isEmpty() || "UUUU".equals(province)) {
+            this.province = "Nacional";
+        } else {
+            this.province = province.length() > 100 ? province.substring(0, 100) : province;
+        }
+    }
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
     public LocalDate getDate() {
@@ -65,27 +83,48 @@ public class Report {
         this.date = date;
     }
 
-    public int getConfirmed() {
+    public Integer getConfirmed() {
         return confirmed;
     }
 
-    public void setConfirmed(int confirmed) {
+    public void setConfirmed(Integer confirmed) {
         this.confirmed = confirmed;
     }
 
-    public int getDeaths() {
+    public Integer getDeaths() {
         return deaths;
     }
 
-    public void setDeaths(int deaths) {
+    public void setDeaths(Integer deaths) {
         this.deaths = deaths;
     }
 
-    public int getRecovered() {
+    public Integer getRecovered() {
         return recovered;
     }
 
-    public void setRecovered(int recovered) {
+    public void setRecovered(Integer recovered) {
         this.recovered = recovered;
+    }
+
+    // Método para establecer ambas fechas al mismo tiempo
+    public void setBothDates(LocalDate date) {
+        this.fecha = date;
+        this.date = date;
+    }
+
+    
+    @Override
+    public String toString() {
+        return "Report{" +
+               "id=" + id +
+               ", iso='" + iso + '\'' +
+               ", province='" + province + '\'' +
+               ", fecha=" + fecha +
+               ", date=" + date +
+               ", confirmed=" + confirmed +
+               ", deaths=" + deaths +
+               ", recovered=" + recovered +
+               '}';
     }
 }

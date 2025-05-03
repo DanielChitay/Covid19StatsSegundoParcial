@@ -4,8 +4,14 @@
  */
 
 package com.covid.covid19stats.controller;
+import com.covid.covid19stats.model.Report;
 import com.covid.covid19stats.service.ReportService;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -13,14 +19,18 @@ import org.springframework.web.bind.annotation.*;
  * @author rodol
  */
 @RestController
+@RequestMapping("/api/reports")
 public class ReportController {
-        
+    
     @Autowired
     private ReportService reportService;
-
-    @GetMapping("/reports/load")
-    public String loadReports(@RequestParam String iso) {
-        reportService.fetchAndSaveReports(iso);
-        return "Reports loaded successfully.";
+    
+    @GetMapping("/by-date-and-iso")
+    public ResponseEntity<Map<String, Report>> getReportsByDateAndIso(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam String iso) {
+        
+        TreeMap<String, Report> reports = reportService.getReportsByDateAndIso(date, iso);
+        return ResponseEntity.ok(reports);
     }
 }

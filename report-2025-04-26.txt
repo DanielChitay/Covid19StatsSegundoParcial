@@ -1,3 +1,0 @@
-2022-09-26 | null | Confirmed: 1120199, Deaths: 19772, Cured: 0
-2021-08-30 | null | Confirmed: 465799, Deaths: 11886, Cured: 0
-2022-05-12 | null | Confirmed: 851215, Deaths: 17772, Cured: 0
